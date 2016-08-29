@@ -39,4 +39,16 @@ defmodule Braintree.Integration.SubscriptionTest do
     assert {:error, error} = Subscription.retry_charge(subscription.id)
     assert error.message =~ "Subscription status must be Past Due in order to retry."
   end
+
+  test "update/2 with a subscription_id" do
+    {:ok, subscription} = create_test_subscription
+
+    assert {:ok, subscription} = Subscription.update(subscription.id, %{
+      plan_id: "business",
+      price: "16.99"
+    })
+
+    assert subscription.plan_id == "business"
+    assert subscription.price == "16.99"
+  end
 end
